@@ -3,7 +3,7 @@ QT       += core gui network qml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = IKUNPlayer
+TARGET = iKunPlayer
 TEMPLATE = app
 
 # The following define makes yousr compiler emit warnings if you use
@@ -65,9 +65,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 
-
-
 macx: LIBS += -L$$PWD/mpv/ -lmpv.2
+win32: LIBS += -L$$PWD/mpv/ -llibmpv.dll
 
 INCLUDEPATH += $$PWD/mpv/include
 DEPENDPATH += $$PWD/mpv/include
