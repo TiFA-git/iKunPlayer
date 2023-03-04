@@ -11,6 +11,8 @@ class GetRealUrl : public QObject
     Q_OBJECT
 public:
     explicit GetRealUrl(QObject *parent = nullptr);
+    ~GetRealUrl();
+
 
 
 public:

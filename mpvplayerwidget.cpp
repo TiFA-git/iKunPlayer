@@ -30,6 +30,9 @@ MpvPlayerWidget::MpvPlayerWidget(QWidget *parent) :
 MpvPlayerWidget::~MpvPlayerWidget()
 {
     delete ui;
+    delete mpv;
+    delete hideCursor;
+    delete mouseClickTimer;
 }
 
 void MpvPlayerWidget::creatMpvPlayer()

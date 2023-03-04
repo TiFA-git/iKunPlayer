@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("IKUNPlayer");
-    urlGetter = new GetRealUrl;
     QThread *loadThread = new QThread(this);
+    urlGetter = new GetRealUrl;
     urlGetter->moveToThread(loadThread);
     connect(this, &MainWindow::sig_runGet, urlGetter, &GetRealUrl::getRealUrl);
     connect(urlGetter, &GetRealUrl::sig_getSuccess, this, &MainWindow::slot_recRes);
@@ -54,6 +54,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete hideCursor;
+    delete onTimeUpdateUrls;
+    delete urlGetter;
 }
 
 void MainWindow::onProcessFullScreen()
