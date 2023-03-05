@@ -1,5 +1,6 @@
 #include "mpvplayerwidget.h"
 #include "ui_mpvplayerwidget.h"
+#include <QDebug>
 
 
 // 唤醒函数
@@ -59,9 +60,15 @@ void MpvPlayerWidget::creatMpvPlayer()
         throw std::runtime_error("mpv failed to initialize");
 }
 
-void MpvPlayerWidget::setProperty(const QString &name, const QString &value)
+void MpvPlayerWidget::slot_setProperty(QString name, QString value)
 {
+    qDebug() << __FUNCTION__ << name;
     mpv_set_option_string(mpv, name.toLatin1().data(), value.toLatin1().data());
+}
+
+void MpvPlayerWidget::slot_CMD(QString name, QString value)
+{
+    qDebug() << __FUNCTION__ << name;
 }
 
 QString MpvPlayerWidget::getProperty(const QString &name) const
@@ -93,7 +100,7 @@ void MpvPlayerWidget::mousePressEvent(QMouseEvent *event)
         event->accept();
         return;
     }
-    mouseClickTimer->start();
+//    mouseClickTimer->start();
 
 }
 

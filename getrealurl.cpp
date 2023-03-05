@@ -14,6 +14,8 @@ GetRealUrl::GetRealUrl(QObject *parent) : QObject(parent)
 GetRealUrl::~GetRealUrl()
 {
     QThreadPool::globalInstance()->releaseThread();
+    QThreadPool::globalInstance()->clear();
+    QThreadPool::globalInstance()->~QThreadPool();
 }
 
 void GetRealUrl::getRealUrl()

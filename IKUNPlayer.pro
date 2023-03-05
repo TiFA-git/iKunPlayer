@@ -40,6 +40,7 @@ CONFIG(debug, debug|release){
 
 SOURCES += \
     comnetwork.cpp \
+    controller.cpp \
     getdouyu.cpp \
     gethuya.cpp \
     getrealurl.cpp \
@@ -49,6 +50,7 @@ SOURCES += \
 
 HEADERS += \
     comnetwork.h \
+    controller.h \
     getdouyu.h \
     gethuya.h \
     getrealurl.h \
@@ -56,6 +58,7 @@ HEADERS += \
     mpvplayerwidget.h
 
 FORMS += \
+        controller.ui \
         mainwindow.ui \
         mpvplayerwidget.ui
 
