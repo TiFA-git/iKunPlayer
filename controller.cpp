@@ -22,3 +22,9 @@ void Controller::on_pushButton_send_clicked()
     emit sig_sendCMD(cmd, args);
 }
 
+
+void Controller::on_pushButton_playlist_clicked()
+{
+    emit sig_taggleList();
+}
+

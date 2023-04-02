@@ -18,7 +18,7 @@ protected:
     void run();
 
 signals:
-    void sig_sendUrl(QString, QJsonObject);
+    void sig_sendUrl(QString, QJsonObject, QString);
 
 private:
     QString live(QString e);
@@ -27,7 +27,7 @@ private:
 
 
 private:
-    QString rid;
+    QString m_rid;
     QString Nick;
 
 };

@@ -27,7 +27,7 @@ void GetHuYa::get_real_url()
 {
     QJsonObject real_lists;
     QString real_url;
-    QString room_url = QString("https://m.huya.com/%1").arg(rid);
+    QString room_url = QString("https://m.huya.com/%1").arg(m_rid);
 //    QString room_url = "http://00f06771-a453-4d77-b65d-f9ffa115c86d.mock.pstmn.io";
     QByteArray response_ = ComNetWork::get(room_url, true);
     QString response  = QString::fromUtf8(response_);
@@ -58,7 +58,7 @@ void GetHuYa::get_real_url()
             }
         }
     }
-    emit sig_sendUrl(Nick, real_lists);
+    emit sig_sendUrl(Nick, real_lists, m_rid);
     return;
 }
 
@@ -140,7 +140,7 @@ QString GetHuYa::getTime17()
 
 void GetHuYa::setRid(QString rid_)
 {
-    rid = rid_;
+    m_rid = rid_;
 }
 
 void GetHuYa::setNick(QString nick_)

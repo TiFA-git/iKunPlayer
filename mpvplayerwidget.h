@@ -24,8 +24,6 @@ public:
 
 public slots:
     void slot_setProperty(QString name, QString value); // 设置mpv属性
-    void slot_CMD(QString, QString);
-
 
 
 signals:
@@ -33,6 +31,7 @@ signals:
     void mpv_palyEnd(); // 播放结束的信号
     void send_setFullScreen();
     void sig_pause();
+    void sig_showCtrl(bool);
 
 
 protected:

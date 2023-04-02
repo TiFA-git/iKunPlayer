@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "controller.h"
+#include "playerlistwidget.h"
+#include "danmuclient.h"
+#include "bullet.h"
+
+#include <QRandomGenerator>
 #include <QList>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -17,12 +22,17 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    isFullScreen(false)
+    isFullScreen(false),
+    isAllowDanMu(false)
 {
     ui->setupUi(this);
     setWindowTitle("iKunPlayer");
 
-//    initControllerWidget();
+
+    initControllerWidget(); //  全屏控制器
+    initListWidget();   //  全屏播放列表
+    initBulletClient();  // 创建弹幕服务器
+
     loadThread = new QThread(this);
     urlGetter = new GetRealUrl;
     urlGetter->moveToThread(loadThread);
@@ -47,11 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->playerWidget->slot_setProperty("input-cursor", "no");
     ui->playerWidget->slot_setProperty("input-buildin-bindings", "yes");
-//    connect(controllerWidget, &Controller::sig_sendCMD, mpvPlayer, &MpvPlayerWidget::slot_setProperty);
-
 
     emit sig_runGet();
-//    setFocusPolicy(Qt::StrongFocus);
 }
 
 MainWindow::~MainWindow()
@@ -65,12 +72,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::onProcessFullScreen()
 {    
+
     if(isFullScreen){
         isFullScreen = false;
         setWindowFlags(Qt::Widget);
         showNormal();
         ui->leftFrame->setHidden(false);
         ui->ctrlFrame->setHidden(false);
+        playerListWidget->hide();
     }else{
         isFullScreen = true;
         setWindowFlags(Qt::Window);
@@ -80,15 +89,16 @@ void MainWindow::onProcessFullScreen()
     }
 }
 
-void MainWindow::slot_recRes(QString nick, QJsonObject res)
+void MainWindow::slot_recRes(QString nick, QJsonObject res, QString rid)
 {
-    qDebug() << nick;
     if(!res.isEmpty()){
         curUrlObj = res;
         if(realUrlsMap.contains(nick)){
             realUrlsMap.remove(nick);
+            m_nick2Rid.remove(nick);
         }
         realUrlsMap.insert(nick, curUrlObj);
+        m_nick2Rid.insert(nick, rid);
     }
 }
 
@@ -105,6 +115,44 @@ bool MainWindow::isRecord()
     return m_isRecord;
 }
 
+void MainWindow::initListWidget()
+{
+    playerListWidget = new PlayerListWidget(this);
+    playerListWidget->setFixedHeight(QApplication::desktop()->height());
+    playerListWidget->move(0, 0);
+    playerListWidget->hide();
+    connect(playerListWidget, &PlayerListWidget::sig_ItemClick, this, &MainWindow::on_listWidget_itemClicked);
+}
+
+void MainWindow::initBulletClient()
+{
+    m_bulletThread = new QThread(this);
+    m_bulletClient = new DanMuClient(this);
+    // 登陆信号
+    connect(this, &MainWindow::sig_loginBulletClient, m_bulletClient, &DanMuClient::slot_loginServer);
+    connect(m_bulletClient, &DanMuClient::sig_lunchBullet, this, &MainWindow::slot_receivedBullet, Qt::QueuedConnection);
+    // 登出信号
+    connect(this, &MainWindow::sig_stopDanMuClient, m_bulletClient, &DanMuClient::slot_logoutSever);
+    m_bulletClient->moveToThread(m_bulletThread);
+    m_bulletThread->start();
+}
+
+void MainWindow::toggleDanMu(bool b)
+{
+    isAllowDanMu = b;
+    if(b){
+        emit sig_loginBulletClient(m_curRid);  // 连接弹幕
+    }else{
+        bool curState = m_bulletClient->getBulletState();
+        qDebug() << curState;
+        if(curState){
+            emit sig_stopDanMuClient();  // 关闭弹幕连接
+        }
+        // 清除屏幕上的弹幕
+        emit sig_clearBullet();
+    }
+}
+
 void MainWindow::slot_updateUrls()
 {
     realUrlsMap.clear();
@@ -115,26 +163,28 @@ void MainWindow::slot_updateUrls()
 // 播放/停止
 void MainWindow::on_playPushButton_clicked()
 {
-    QString videoName = "http://al.flv.huya.com/src/1394575534-1394575534-5989656310331736064-2789274524-10057-A-0-1.flv?wsSecret=d17a56fc88ef412df81e8e9b8b6db032&wsTime=63df1667&fm=RFdxOEJjSjNoNkRKdDZUWV8kMF8kMV8kMl8kMw%3D%3D&txyp=o%3Aqzeic1%3B&fs=bgct&sphdcdn=al_7-tx_3-js_3-ws_7-bd_2-hw_2&sphdDC=huya&sphd=264_*-265_*&exsphd=264_500,264_2000,264_4000,&t=103";
-    //QString videoName = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
 
-    // 选择是否播放视频
-    if (!isPlay())
-    {
-        m_isPlay = true;
-        ui->playPushButton->setText("停止");
+//    QString videoName = "http://al.flv.huya.com/src/1394575534-1394575534-5989656310331736064-2789274524-10057-A-0-1.flv?wsSecret=d17a56fc88ef412df81e8e9b8b6db032&wsTime=63df1667&fm=RFdxOEJjSjNoNkRKdDZUWV8kMF8kMV8kMl8kMw%3D%3D&txyp=o%3Aqzeic1%3B&fs=bgct&sphdcdn=al_7-tx_3-js_3-ws_7-bd_2-hw_2&sphdDC=huya&sphd=264_*-265_*&exsphd=264_500,264_2000,264_4000,&t=103";
+//    //QString videoName = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+//    // 选择是否播放视频
+//    if (!isPlay())
+//    {
+//        m_isPlay = true;
+//        ui->playPushButton->setText("停止");
 
-        ui->playerWidget->play(videoName); // 播放视频
-    }
-    else
-    {
-        m_isPlay = false;
-        ui->playPushButton->setText("播放");
-        ui->pausePushButton->setText("暂停");
+//        ui->playerWidget->play(videoName); // 播放视频
+//    }
+//    else
+//    {
+//        m_isPlay = false;
+//        ui->playPushButton->setText("播放");
+//        ui->pausePushButton->setText("暂停");
 
-        ui->playerWidget->slot_setProperty("pause", "no");
-        ui->playerWidget->play(" "); // 播放空视频，代替停止播放
-    }
+//        ui->playerWidget->slot_setProperty("pause", "no");
+//        ui->playerWidget->play(" "); // 播放空视频，代替停止播放
+//    }
+
+
 }
 
 // 暂停/恢复视频
@@ -216,8 +266,15 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     QString clickName = item->text();
     curUrlObj = realUrlsMap.value(clickName);
     ui->rateSelect->clear();
+    playerListWidget->clearRate();
     foreach (QString rateName, curUrlObj.keys()) {
         ui->rateSelect->addItem(rateName);
+        playerListWidget->addRate(rateName);
+    }
+    // 切换弹幕服务器
+    m_curRid = m_nick2Rid.value(clickName);
+    if(isAllowDanMu){
+        emit sig_loginBulletClient(m_curRid);
     }
 }
 
@@ -229,7 +286,6 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_rateSelect_currentTextChanged(const QString &key)
 {
     QString url = curUrlObj.value(key).toString();
-    qDebug() << url;
     ui->playerWidget->play(url);
 }
 
@@ -274,16 +330,64 @@ void MainWindow::slot_updateUI()
     if(b){
         realUrlsMapUI = realUrlsMap;
         ui->listWidget->clear();
+        playerListWidget->clearLst();
         foreach(QString tmp2, newLst){
             ui->listWidget->addItem(tmp2);
+            playerListWidget->addItem(tmp2);
         }
+    }
+}
+
+void MainWindow::slot_processCtrlShow(bool b)
+{
+    if(isFullScreen == false){
+        if(controllerWidget->isVisible())
+            controllerWidget->hide();
+        return;
+    }
+    if(controllerWidget->isVisible() != b){
+        controllerWidget->setVisible(b);
+    }
+}
+
+void MainWindow::slot_taggleLst()
+{
+    playerListWidget->setVisible(playerListWidget->isHidden());
+}
+
+void MainWindow::slot_receivedBullet(QString msg, QString name, QString board)
+{
+    Bullet *bullet = new Bullet(this);
+    connect(bullet, SIGNAL(sig_accurated(QObject*)), this, SLOT(slot_accurated(QObject*)));
+    connect(this, &MainWindow::sig_clearBullet, bullet, &Bullet::slot_destroyBullet);
+    m_bulletOnScreen.append(bullet);
+    bullet->setFontSize(20);
+    int lineIdx = QRandomGenerator::global()->bounded(bullet->getLineCnt() / 4);  // 随机第几行显示
+    bullet->shoot(msg, lineIdx);
+}
+
+void MainWindow::slot_accurated(QObject * bullet)
+{
+    if(bullet){
+        m_bulletOnScreen.removeAll(bullet);
+        delete bullet;
+        bullet = nullptr;
     }
 }
 
 void MainWindow::initControllerWidget()
 {
     controllerWidget = new Controller(this);
-    controllerWidget->move((this->width() - controllerWidget->width()) / 2, this->height() - 200);
-    connect(controllerWidget, SIGNAL(sig_sendCMD(QString, QString)), ui->playerWidget, SLOT(slot_setProperty(QString, QString)));
-    controllerWidget->show();
+    controllerWidget->move((QApplication::desktop()->width() - controllerWidget->width()) / 2,
+                           QApplication::desktop()->height()- 200);
+    connect(controllerWidget, &Controller::sig_sendCMD, ui->playerWidget, &MpvPlayerWidget::slot_setProperty);
+    connect(ui->playerWidget, &MpvPlayerWidget::sig_showCtrl, this, &MainWindow::slot_processCtrlShow);
+    connect(controllerWidget, &Controller::sig_taggleList, this, &MainWindow::slot_taggleLst);
 }
+
+void MainWindow::on_checkBox_toggled(bool checked)
+{
+    isAllowDanMu = checked;
+    toggleDanMu(isAllowDanMu);
+}
+

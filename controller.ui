@@ -87,6 +87,11 @@
         </item>
         <item row="2" column="4">
          <widget class="QPushButton" name="pushButton_send">
+          <property name="font">
+           <font>
+            <family>.AppleSystemUIFont</family>
+           </font>
+          </property>
           <property name="text">
            <string>send</string>
           </property>

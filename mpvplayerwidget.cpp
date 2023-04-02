@@ -66,10 +66,6 @@ void MpvPlayerWidget::slot_setProperty(QString name, QString value)
     mpv_set_option_string(mpv, name.toLatin1().data(), value.toLatin1().data());
 }
 
-void MpvPlayerWidget::slot_CMD(QString name, QString value)
-{
-    qDebug() << __FUNCTION__ << name;
-}
 
 QString MpvPlayerWidget::getProperty(const QString &name) const
 {
@@ -111,7 +107,8 @@ void MpvPlayerWidget::mouseMoveEvent(QMouseEvent *event)
     if(hideCursor->isActive())
         hideCursor->stop();
     hideCursor->start();
-    event->accept();
+    emit sig_showCtrl(true);
+    QWidget::mouseMoveEvent(event);
 }
 
 void MpvPlayerWidget::keyPressEvent(QKeyEvent *event)
@@ -136,6 +133,7 @@ void MpvPlayerWidget::onTimeCursorHide()
 {
     setCursor(Qt::BlankCursor);
     hideCursor->stop();
+    emit sig_showCtrl(false);
 }
 
 void MpvPlayerWidget::slot_mouseClickCnt()
