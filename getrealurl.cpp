@@ -11,6 +11,13 @@ GetRealUrl::GetRealUrl(QObject *parent) : QObject(parent)
     QThreadPool::globalInstance()->setMaxThreadCount(5);
 }
 
+GetRealUrl::~GetRealUrl()
+{
+    QThreadPool::globalInstance()->releaseThread();
+    QThreadPool::globalInstance()->clear();
+    QThreadPool::globalInstance()->~QThreadPool();
+}
+
 void GetRealUrl::getRealUrl()
 {
 //    qDebug() << "getrealurl";
@@ -18,14 +25,14 @@ void GetRealUrl::getRealUrl()
         QString rid = curLine.at(1);
         QString name = curLine.at(0);
         if(curLine.at(2) == "斗鱼"){
-            GetDouYu *DYGeter = new GetDouYu;
+            GetDouYu *DYGeter = new GetDouYu(this);
             connect(DYGeter, &GetDouYu::sig_sendRes, this, &GetRealUrl::slots_convertUrl, Qt::DirectConnection);
             DYGeter->setRid(rid);
             DYGeter->setNick(name);
             DYGeter->setAutoDelete(true);
             QThreadPool::globalInstance()->start(DYGeter);
         }else if(curLine.at(2) == "虎牙"){
-            GetHuYa *HYGeter =new GetHuYa;
+            GetHuYa *HYGeter =new GetHuYa(this);
             connect(HYGeter,&GetHuYa::sig_sendUrl, this, &GetRealUrl::slots_convertUrl, Qt::DirectConnection);
             HYGeter->setNick(name);
             HYGeter->setRid(rid);

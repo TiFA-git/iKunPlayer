@@ -19,10 +19,13 @@ class MpvPlayerWidget : public QWidget
 public:
     explicit MpvPlayerWidget(QWidget *parent = nullptr);
     ~MpvPlayerWidget();
-
-    void setProperty(const QString &name, const QString &value); // 设置mpv属性
     QString getProperty(const QString &name) const; // 获得mpv属性
     void play(QString filename); // 播放视频
+
+public slots:
+    void slot_setProperty(QString name, QString value); // 设置mpv属性
+    void slot_CMD(QString, QString);
+
 
 
 signals:

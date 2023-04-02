@@ -1,5 +1,6 @@
 #include "mpvplayerwidget.h"
 #include "ui_mpvplayerwidget.h"
+#include <QDebug>
 
 
 // 唤醒函数
@@ -30,6 +31,9 @@ MpvPlayerWidget::MpvPlayerWidget(QWidget *parent) :
 MpvPlayerWidget::~MpvPlayerWidget()
 {
     delete ui;
+    delete mpv;
+    delete hideCursor;
+    delete mouseClickTimer;
 }
 
 void MpvPlayerWidget::creatMpvPlayer()
@@ -56,9 +60,15 @@ void MpvPlayerWidget::creatMpvPlayer()
         throw std::runtime_error("mpv failed to initialize");
 }
 
-void MpvPlayerWidget::setProperty(const QString &name, const QString &value)
+void MpvPlayerWidget::slot_setProperty(QString name, QString value)
 {
+    qDebug() << __FUNCTION__ << name << value;
     mpv_set_option_string(mpv, name.toLatin1().data(), value.toLatin1().data());
+}
+
+void MpvPlayerWidget::slot_CMD(QString name, QString value)
+{
+    qDebug() << __FUNCTION__ << name;
 }
 
 QString MpvPlayerWidget::getProperty(const QString &name) const
@@ -90,7 +100,7 @@ void MpvPlayerWidget::mousePressEvent(QMouseEvent *event)
         event->accept();
         return;
     }
-    mouseClickTimer->start();
+//    mouseClickTimer->start();
 
 }
 

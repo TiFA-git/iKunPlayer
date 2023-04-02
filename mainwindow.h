@@ -13,6 +13,7 @@
 #include "getrealurl.h"
 
 
+class Controller;
 namespace Ui {
 class MainWindow;
 }
@@ -47,7 +48,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
+    void initControllerWidget();
     bool isPlay(); // 判断是否在播放
     bool isRecord(); // 判断是否在录制
     void loadPlayLst();
@@ -55,7 +56,6 @@ private:
 
 
 private:
-    MpvPlayerWidget *mpvPlayer;
     bool m_isPlay;
     bool m_isRecord;
     QList<QStringList> playLst;
@@ -66,6 +66,8 @@ private:
     QTimer *hideCursor;
     QTimer *onTimeUpdateUrls;
     GetRealUrl *urlGetter;
+    QThread *loadThread;
+    Controller *controllerWidget;
 
 };
 

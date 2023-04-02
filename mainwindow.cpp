@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "controller.h"
 #include <QList>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -9,6 +10,8 @@
 #include <QTimer>
 #include <QThreadPool>
 #include <QThread>
+#include <QDesktopWidget>
+#include <QDebug>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,9 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
     isFullScreen(false)
 {
     ui->setupUi(this);
-    setWindowTitle("IKUNPlayer");
+    setWindowTitle("iKunPlayer");
+
+//    initControllerWidget();
+    loadThread = new QThread(this);
     urlGetter = new GetRealUrl;
-    QThread *loadThread = new QThread(this);
     urlGetter->moveToThread(loadThread);
     connect(this, &MainWindow::sig_runGet, urlGetter, &GetRealUrl::getRealUrl);
     connect(urlGetter, &GetRealUrl::sig_getSuccess, this, &MainWindow::slot_recRes);
@@ -40,11 +45,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(onTimeUpdateUrls, &QTimer::timeout, this, &MainWindow::slot_updateUrls);
     onTimeUpdateUrls->start();
 
-//    ui->playerWidget->setProperty("input-x11-keyboard", "yes");
-//    ui->playerWidget->setProperty("input-default-bindings", "yes");
-//    ui->playerWidget->setProperty("input-media-keys", "yes");
-    ui->playerWidget->setProperty("input-cursor", "no");
-    ui->playerWidget->setProperty("input-buildin-bindings", "yes");
+    ui->playerWidget->slot_setProperty("input-cursor", "no");
+    ui->playerWidget->slot_setProperty("input-buildin-bindings", "yes");
+//    connect(controllerWidget, &Controller::sig_sendCMD, mpvPlayer, &MpvPlayerWidget::slot_setProperty);
 
 
     emit sig_runGet();
@@ -54,6 +57,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete hideCursor;
+    delete onTimeUpdateUrls;
+    delete urlGetter;
+    delete loadThread;
 }
 
 void MainWindow::onProcessFullScreen()
@@ -125,7 +132,7 @@ void MainWindow::on_playPushButton_clicked()
         ui->playPushButton->setText("播放");
         ui->pausePushButton->setText("暂停");
 
-        ui->playerWidget->setProperty("pause", "no");
+        ui->playerWidget->slot_setProperty("pause", "no");
         ui->playerWidget->play(" "); // 播放空视频，代替停止播放
     }
 }
@@ -152,12 +159,12 @@ void MainWindow::on_pausePushButton_clicked()
     if(pasued == "no")
     {
         ui->pausePushButton->setText("恢复");
-        ui->playerWidget->setProperty("pause", "yes");
+        ui->playerWidget->slot_setProperty("pause", "yes");
     }
     else if(pasued == "yes")
     {
         ui->pausePushButton->setText("暂停");
-        ui->playerWidget->setProperty("pause", "no");
+        ui->playerWidget->slot_setProperty("pause", "no");
     }
 }
 
@@ -184,7 +191,7 @@ void MainWindow::on_recordPushButton_clicked()
         m_isRecord = true;
         ui->recordPushButton->setText("录像中");
 
-        ui->playerWidget->setProperty("stream-record", "./out.mp4");
+        ui->playerWidget->slot_setProperty("stream-record", "./out.mp4");
     }
     else
     {
@@ -192,7 +199,7 @@ void MainWindow::on_recordPushButton_clicked()
         m_isRecord = false;
         ui->recordPushButton->setText("录像");
 
-        ui->playerWidget->setProperty("stream-record", " ");
+        ui->playerWidget->slot_setProperty("stream-record", " ");
     }
 }
 
@@ -240,12 +247,12 @@ void MainWindow::slot_pause()
     if(pasued == "no")
     {
         ui->pausePushButton->setText("恢复");
-        ui->playerWidget->setProperty("pause", "yes");
+        ui->playerWidget->slot_setProperty("pause", "yes");
     }
     else if(pasued == "yes")
     {
         ui->pausePushButton->setText("暂停");
-        ui->playerWidget->setProperty("pause", "no");
+        ui->playerWidget->slot_setProperty("pause", "no");
     }
 }
 
@@ -271,4 +278,12 @@ void MainWindow::slot_updateUI()
             ui->listWidget->addItem(tmp2);
         }
     }
+}
+
+void MainWindow::initControllerWidget()
+{
+    controllerWidget = new Controller(this);
+    controllerWidget->move((this->width() - controllerWidget->width()) / 2, this->height() - 200);
+    connect(controllerWidget, SIGNAL(sig_sendCMD(QString, QString)), ui->playerWidget, SLOT(slot_setProperty(QString, QString)));
+    controllerWidget->show();
 }
