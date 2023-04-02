@@ -38,6 +38,9 @@ QWidget{
 QPushButton:hover{
 	background-color: rgb(66, 66, 66);
 }
+QComboBox{
+color:rgb(85, 255, 127)
+}
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -97,7 +100,7 @@ QPushButton:hover{
        <item>
         <widget class="QComboBox" name="rateSelect">
          <property name="styleSheet">
-          <string notr="true">color:rgb(85, 255, 127)</string>
+          <string notr="true"/>
          </property>
         </widget>
        </item>
@@ -197,6 +200,13 @@ QPushButton:hover{
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
              <string>全屏</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>开启弹幕</string>
             </property>
            </widget>
           </item>

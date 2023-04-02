@@ -19,7 +19,7 @@ public:
     void setNick(QString str);
 
 signals:
-    void sig_sendRes(QString, QJsonObject);
+    void sig_sendRes(QString, QJsonObject, QString);
 
 
 public slots:

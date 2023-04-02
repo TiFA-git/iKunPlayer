@@ -47,9 +47,9 @@ void GetRealUrl::getRealUrl()
     emit sig_getFinish();
 }
 
-void GetRealUrl::slots_convertUrl(QString name, QJsonObject(obj))
+void GetRealUrl::slots_convertUrl(QString name, QJsonObject obj, QString rid)
 {
-    emit sig_getSuccess(name, obj);
+    emit sig_getSuccess(name, obj, rid);
 }
 
 void GetRealUrl::loadPlayLst()

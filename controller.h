@@ -16,11 +16,14 @@ public:
     ~Controller();
 
 signals:
-    void sig_sendCMD(QString, QString);
+    void sig_sendCMD(QString cmd, QString msg);
+    void sig_taggleList();
 
 
 private slots:
     void on_pushButton_send_clicked();
+
+    void on_pushButton_playlist_clicked();
 
 private:
     Ui::Controller *ui;

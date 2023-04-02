@@ -19,10 +19,10 @@ public:
 
 public slots:
     void getRealUrl();
-    void slots_convertUrl(QString, QJsonObject);
+    void slots_convertUrl(QString, QJsonObject, QString);
 
 signals:
-    void sig_getSuccess(QString, QJsonObject);
+    void sig_getSuccess(QString, QJsonObject, QString);
     void sig_getFinish();
 
 private slots:

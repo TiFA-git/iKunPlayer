@@ -77,7 +77,7 @@ QJsonObject GetDouYu::getRealUrl()
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1.flv?uuid=").arg(key));
         }
     }
-    emit sig_sendRes(nick, resObj);
+    emit sig_sendRes(nick, resObj, rid);
     return resObj;
 }
 

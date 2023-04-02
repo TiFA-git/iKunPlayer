@@ -1,5 +1,5 @@
 #------------------------------------------------
-QT       += core gui network qml
+QT       += core gui network qml websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,28 +39,35 @@ CONFIG(debug, debug|release){
 }
 
 SOURCES += \
+    bullet.cpp \
     comnetwork.cpp \
     controller.cpp \
+    danmuclient.cpp \
     getdouyu.cpp \
     gethuya.cpp \
     getrealurl.cpp \
         main.cpp \
         mainwindow.cpp \
-    mpvplayerwidget.cpp
+    mpvplayerwidget.cpp \
+    playerlistwidget.cpp
 
 HEADERS += \
+    bullet.h \
     comnetwork.h \
     controller.h \
+    danmuclient.h \
     getdouyu.h \
     gethuya.h \
     getrealurl.h \
         mainwindow.h \
-    mpvplayerwidget.h
+    mpvplayerwidget.h \
+    playerlistwidget.h
 
 FORMS += \
         controller.ui \
         mainwindow.ui \
-        mpvplayerwidget.ui
+        mpvplayerwidget.ui \
+        playerlistwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

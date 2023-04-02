@@ -18,7 +18,13 @@ void Controller::on_pushButton_send_clicked()
 {
     qDebug() << __FUNCTION__ << ui->lineEdit_cmd->text();
     QString cmd = ui->lineEdit_cmd->text();
-    QString args = ui->lineEdit_cmd->text();
+    QString args = ui->lineEdit_args->text();
     emit sig_sendCMD(cmd, args);
+}
+
+
+void Controller::on_pushButton_playlist_clicked()
+{
+    emit sig_taggleList();
 }
 
