@@ -1,4 +1,6 @@
 #include "danmuclient.h"
+#include "comnetwork.h"
+
 #include <QWebSocket>
 #include <QUrl>
 #include <QByteArray>
@@ -88,12 +90,15 @@ void DanMuClient::slot_byteReceived(QByteArray byte)
 {
     QTextCodec *tc = QTextCodec::codecForName("utf-8");
     QString str = tc->toUnicode(byte);
-    QStringList msgSplit = str.split("/");
-    foreach (QString msg, msgSplit) {
-        if(msg.contains("txt@=")){
-            msg.remove("txt@=");
-            emit sig_lunchBullet(msg, "tifa", "tifa");
+    QStringList tmp = str.split("type@=chatmsg");
+    foreach(QString s, tmp){
+        QString txt = ComNetWork::search("txt@=(.*)/", s, 1, true);
+        if(txt.isEmpty()){
+            continue;
         }
+        QString nn = ComNetWork::search("nn@=(.*)/", s, 1, true);
+        QString bnn = ComNetWork::search("bnn@=(.*)/", s, 1, true);
+        emit sig_lunchBullet(txt, nn, bnn);
     }
 }
 

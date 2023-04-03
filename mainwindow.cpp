@@ -22,8 +22,9 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    isFullScreen(false),
-    isAllowDanMu(false)
+    m_isFullScreen(false),
+    isAllowDanMu(false),
+    m_curBulletCnt(0)
 {
     ui->setupUi(this);
     setWindowTitle("iKunPlayer");
@@ -73,15 +74,15 @@ MainWindow::~MainWindow()
 void MainWindow::onProcessFullScreen()
 {    
 
-    if(isFullScreen){
-        isFullScreen = false;
+    if(m_isFullScreen){
+        m_isFullScreen = false;
         setWindowFlags(Qt::Widget);
         showNormal();
         ui->leftFrame->setHidden(false);
         ui->ctrlFrame->setHidden(false);
         playerListWidget->hide();
     }else{
-        isFullScreen = true;
+        m_isFullScreen = true;
         setWindowFlags(Qt::Window);
         showFullScreen();
         ui->leftFrame->setHidden(true);
@@ -340,7 +341,7 @@ void MainWindow::slot_updateUI()
 
 void MainWindow::slot_processCtrlShow(bool b)
 {
-    if(isFullScreen == false){
+    if(m_isFullScreen == false){
         if(controllerWidget->isVisible())
             controllerWidget->hide();
         return;
@@ -357,21 +358,29 @@ void MainWindow::slot_taggleLst()
 
 void MainWindow::slot_receivedBullet(QString msg, QString name, QString board)
 {
-    Bullet *bullet = new Bullet(this);
-    connect(bullet, SIGNAL(sig_accurated(QObject*)), this, SLOT(slot_accurated(QObject*)));
-    connect(this, &MainWindow::sig_clearBullet, bullet, &Bullet::slot_destroyBullet);
-    m_bulletOnScreen.append(bullet);
-    bullet->setFontSize(20);
-    int lineIdx = QRandomGenerator::global()->bounded(bullet->getLineCnt() / 4);  // 随机第几行显示
-    bullet->shoot(msg, lineIdx);
+    QString txt = (board.size() > 0) ? QString("[%1]%2：%3").arg(board, name, msg) : QString("%1：%2").arg(name, msg);
+    if(m_isFullScreen){
+        if(m_curBulletCnt > ui->lineEdit_bulletCnt->text().toInt()){
+            return;
+        }
+        m_curBulletCnt++;
+        Bullet *bullet = new Bullet(this);
+        connect(bullet, SIGNAL(sig_accurated(QObject*)), this, SLOT(slot_accurated(QObject*)));
+        connect(this, &MainWindow::sig_clearBullet, bullet, &Bullet::slot_destroyBullet);
+        bullet->setFontSize(20);
+        int lineIdx = QRandomGenerator::global()->bounded(bullet->getLineCnt() / 4);  // 随机第几行显示
+        bullet->shoot(txt, lineIdx);
+    }else {
+        ui->textEdit_bulletScreen->append("\n" + txt);
+    }
 }
 
 void MainWindow::slot_accurated(QObject * bullet)
 {
     if(bullet){
-        m_bulletOnScreen.removeAll(bullet);
         delete bullet;
         bullet = nullptr;
+        m_curBulletCnt--;
     }
 }
 
