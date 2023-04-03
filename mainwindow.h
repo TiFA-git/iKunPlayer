@@ -92,6 +92,8 @@ private:
     QThread *m_bulletThread;
     bool isAllowDanMu;
     QString m_curRid;
+    int m_maxBulletNum;  // 屏幕上最大弹幕数
+    int m_curBulletCnt;  // 当前弹幕数
 
 };
 

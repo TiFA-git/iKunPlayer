@@ -23,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_isFullScreen(false),
-    isAllowDanMu(false)
+    isAllowDanMu(false),
+    m_curBulletCnt(0)
 {
     ui->setupUi(this);
     setWindowTitle("iKunPlayer");
@@ -359,6 +360,10 @@ void MainWindow::slot_receivedBullet(QString msg, QString name, QString board)
 {
     QString txt = (board.size() > 0) ? QString("[%1]%2：%3").arg(board, name, msg) : QString("%1：%2").arg(name, msg);
     if(m_isFullScreen){
+        if(m_curBulletCnt > ui->lineEdit_bulletCnt->text().toInt()){
+            return;
+        }
+        m_curBulletCnt++;
         Bullet *bullet = new Bullet(this);
         connect(bullet, SIGNAL(sig_accurated(QObject*)), this, SLOT(slot_accurated(QObject*)));
         connect(this, &MainWindow::sig_clearBullet, bullet, &Bullet::slot_destroyBullet);
@@ -375,6 +380,7 @@ void MainWindow::slot_accurated(QObject * bullet)
     if(bullet){
         delete bullet;
         bullet = nullptr;
+        m_curBulletCnt--;
     }
 }
 
