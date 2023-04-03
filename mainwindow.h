@@ -81,7 +81,7 @@ private:
     QMap<QString, QString> m_nick2Rid;    //  昵称2房间号， 用于弹幕接受
     QMap<QString, QJsonObject> realUrlsMapUI;  // 界面显示直播源，较旧
     QJsonObject curUrlObj;
-    bool isFullScreen;
+    bool m_isFullScreen;
     QTimer *hideCursor;
     QTimer *onTimeUpdateUrls;
     GetRealUrl *urlGetter;
@@ -92,7 +92,6 @@ private:
     QThread *m_bulletThread;
     bool isAllowDanMu;
     QString m_curRid;
-    QList<QObject *> m_bulletOnScreen;  // 现在还在屏幕上到弹幕，用于关闭弹幕时立即隐藏
 
 };
 
