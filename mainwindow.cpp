@@ -4,6 +4,7 @@
 #include "playerlistwidget.h"
 #include "danmuclient.h"
 #include "bullet.h"
+#include "bulletpad.h"
 
 #include <QRandomGenerator>
 #include <QList>
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initControllerWidget(); //  全屏控制器
     initListWidget();   //  全屏播放列表
     initBulletClient();  // 创建弹幕服务器
+    initBulletPad();    // 弹幕控制器
 
     loadThread = new QThread(this);
     urlGetter = new GetRealUrl;
@@ -152,6 +154,17 @@ void MainWindow::toggleDanMu(bool b)
         // 清除屏幕上的弹幕
         emit sig_clearBullet();
     }
+}
+
+void MainWindow::initBulletPad()
+{
+    m_bulletPad = new BulletPad(this);
+    m_maxBulletNum = m_bulletPad->getBulletNum();
+    m_fontSize = m_bulletPad->getFontSize();
+    m_rowNum = m_bulletPad->getBulletRow();
+    connect(m_bulletPad, &BulletPad::sig_bulletRowCnt, this, &MainWindow::slot_BulletRowCnt);
+    connect(m_bulletPad, &BulletPad::sig_fontSizePixel, this, &MainWindow::slot_BulletSize);
+    connect(m_bulletPad, &BulletPad::sig_maxBulletNum, this, &MainWindow::slot_maxBulletNum);
 }
 
 void MainWindow::slot_updateUrls()
@@ -360,15 +373,15 @@ void MainWindow::slot_receivedBullet(QString msg, QString name, QString board)
 {
     QString txt = (board.size() > 0) ? QString("[%1]%2：%3").arg(board, name, msg) : QString("%1：%2").arg(name, msg);
     if(m_isFullScreen){
-        if(m_curBulletCnt > ui->lineEdit_bulletCnt->text().toInt()){
+        if(m_curBulletCnt > m_maxBulletNum){
             return;
         }
         m_curBulletCnt++;
         Bullet *bullet = new Bullet(this);
         connect(bullet, SIGNAL(sig_accurated(QObject*)), this, SLOT(slot_accurated(QObject*)));
         connect(this, &MainWindow::sig_clearBullet, bullet, &Bullet::slot_destroyBullet);
-        bullet->setFontSize(20);
-        int lineIdx = QRandomGenerator::global()->bounded(bullet->getLineCnt() / 4);  // 随机第几行显示
+        bullet->setFontSize(m_fontSize);
+        int lineIdx = QRandomGenerator::global()->bounded(m_rowNum);  // 随机第几行显示
         bullet->shoot(txt, lineIdx);
     }else {
         ui->textEdit_bulletScreen->append("\n" + txt);
@@ -398,5 +411,28 @@ void MainWindow::on_checkBox_toggled(bool checked)
 {
     isAllowDanMu = checked;
     toggleDanMu(isAllowDanMu);
+    if(checked){
+        m_bulletPad->show();
+    }else{
+        m_bulletPad->hide();
+    }
+}
+
+void MainWindow::slot_maxBulletNum(int value)
+{
+    qDebug() << "num " << value;
+    m_maxBulletNum = value;
+}
+
+void MainWindow::slot_BulletRowCnt(int value)
+{
+    qDebug() << "row " << value;
+    m_rowNum = value;
+}
+
+void MainWindow::slot_BulletSize(int value)
+{
+    qDebug() << "size " << value;
+    m_fontSize = value;
 }
 

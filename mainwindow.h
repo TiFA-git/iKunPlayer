@@ -17,6 +17,7 @@ class Controller;
 class PlayerListWidget;
 class DanMuClient;
 class Bullet;
+class BulletPad;
 
 
 namespace Ui {
@@ -59,6 +60,9 @@ private slots:
     void slot_accurated(QObject *);
 
     void on_checkBox_toggled(bool checked);
+    void slot_maxBulletNum(int value);
+    void slot_BulletRowCnt(int value);
+    void slot_BulletSize(int value);
 
 private:
     Ui::MainWindow *ui;
@@ -70,6 +74,7 @@ private:
     void initListWidget();
     void initBulletClient();
     void toggleDanMu(bool b);
+    void initBulletPad();
 
 
 
@@ -92,8 +97,11 @@ private:
     QThread *m_bulletThread;
     bool isAllowDanMu;
     QString m_curRid;
-    int m_maxBulletNum;  // 屏幕上最大弹幕数
+    BulletPad *m_bulletPad;
     int m_curBulletCnt;  // 当前弹幕数
+    int m_maxBulletNum;  // 屏幕上最大弹幕数
+    int m_rowNum;
+    int m_fontSize;
 
 };
 
