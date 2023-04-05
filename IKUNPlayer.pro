@@ -40,6 +40,7 @@ CONFIG(debug, debug|release){
 
 SOURCES += \
     bullet.cpp \
+    bulletpad.cpp \
     comnetwork.cpp \
     controller.cpp \
     danmuclient.cpp \
@@ -53,6 +54,7 @@ SOURCES += \
 
 HEADERS += \
     bullet.h \
+    bulletpad.h \
     comnetwork.h \
     controller.h \
     danmuclient.h \
@@ -64,6 +66,7 @@ HEADERS += \
     playerlistwidget.h
 
 FORMS += \
+        bulletpad.ui \
         controller.ui \
         mainwindow.ui \
         mpvplayerwidget.ui \
