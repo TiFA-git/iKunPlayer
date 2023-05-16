@@ -140,7 +140,7 @@
             <number>5</number>
            </property>
            <property name="value">
-            <number>20</number>
+            <number>40</number>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -158,6 +158,9 @@
            <property name="singleStep">
             <number>10</number>
            </property>
+           <property name="value">
+            <number>35</number>
+           </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -170,6 +173,9 @@
            </property>
            <property name="maximum">
             <number>30</number>
+           </property>
+           <property name="value">
+            <number>8</number>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>

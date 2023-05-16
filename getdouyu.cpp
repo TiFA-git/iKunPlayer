@@ -58,19 +58,15 @@ QJsonObject GetDouYu::getRealUrl()
         if(!(curRate.contains("name")))
             continue;
         if(curRate.contains("rate") && curRate.value("rate").toInt() > 0){
-            resObj.insert(curRate.value("name").toString() + QString(" hw-tct"),
-                       QString("http://hw-tct.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltc1"),
-                        QString("http://hdltc1.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
+            resObj.insert(curRate.value("name").toString() + QString(" openhls-tct"),
+                       QString("http://openhls-tct.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
             resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
                         QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
         }else{
-            resObj.insert(curRate.value("name").toString() + QString(" hw-tct"),
-                       QString("http://hw-tct.douyucdn.cn/live/%1.flv?uuid=").arg(key));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltc1"),
-                        QString("http://hdltc1.douyucdn.cn/live/%1.flv?uuid=").arg(key));
+            resObj.insert(curRate.value("name").toString() + QString(" openhls-tct"),
+                       QString("http://openhls-tct.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
             resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
                         QString("http://hdltctwk.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
