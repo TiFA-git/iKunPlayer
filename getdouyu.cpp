@@ -39,15 +39,15 @@ QJsonObject GetDouYu::getRealUrl()
     }
     if(rateObjLst.isEmpty()){
         QJsonObject tmpBlueray;
-        tmpBlueray.insert("name", "钃濆厜");
+        tmpBlueray.insert("name", "蓝光");
         tmpBlueray.insert("rate", 0);
         tmpBlueray.insert("high_bit", 1);
         QJsonObject tmpSuperClear;
-        tmpSuperClear.insert("name", "瓒呮竻");
+        tmpSuperClear.insert("name", "超清");
         tmpSuperClear.insert("rate", 3);
         tmpSuperClear.insert("high_bit", 0);
         QJsonObject tmpHeightClear;
-        tmpHeightClear.insert("name", "楂樻竻");
+        tmpHeightClear.insert("name", "高清");
         tmpHeightClear.insert("rate", 2);
         tmpHeightClear.insert("high_bit", 0);
         rateObjLst << tmpBlueray << tmpSuperClear << tmpHeightClear;
@@ -60,15 +60,15 @@ QJsonObject GetDouYu::getRealUrl()
         if(curRate.contains("rate") && curRate.value("rate").toInt() > 0){
             resObj.insert(curRate.value("name").toString() + QString(" openhls-tct"),
                        QString("http://openhls-tct.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
-                        QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
+//            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
+//                        QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
         }else{
             resObj.insert(curRate.value("name").toString() + QString(" openhls-tct"),
                        QString("http://openhls-tct.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
-                        QString("http://hdltctwk.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
+//            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
+//                        QString("http://hdltctwk.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1.flv?uuid=").arg(key));
         }
