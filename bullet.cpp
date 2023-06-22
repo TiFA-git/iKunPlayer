@@ -18,15 +18,18 @@ Bullet::Bullet(QObject *parent)
     m_font.setFamily(QStringLiteral("幼圆"));
     m_font.setPixelSize(50);
 
-    m_label = new QLabel;
+    QWidget *parent_ = static_cast<QWidget *>(this->parent());
+    m_label = new QLabel(parent_);
     m_label->setFocusPolicy(Qt::NoFocus);
     m_label->setMinimumWidth(500);
     m_label->setAttribute(Qt::WA_TranslucentBackground);
     m_label->setAttribute(Qt::WA_ShowWithoutActivating);
     m_label->setAttribute(Qt::WA_TransparentForMouseEvents);
-    m_label->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
+//    m_label->setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
+    m_label->setWindowFlags(Qt::FramelessWindowHint  | Qt::WindowStaysOnTopHint);
+    m_label->setWindowFlags(Qt::WindowStaysOnTopHint);
 //    m_label->setWindowFlags(Qt::Tool);
-    m_label->setStyleSheet(QString("color:%1;").arg(QColor::colorNames().at(QRandomGenerator::global()->bounded(QColor::colorNames().count()))));
+    m_label->setStyleSheet(QString("color:%1;background-color: rgba(255, 29, 29,0);").arg(QColor::colorNames().at(QRandomGenerator::global()->bounded(QColor::colorNames().count()))));
     m_label->setFont(m_font);
     m_animation = new QPropertyAnimation(m_label, "pos", this);
     connect(m_animation, SIGNAL(finished()), this, SLOT(slot_amFinished()));
