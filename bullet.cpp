@@ -5,21 +5,17 @@
 
 Bullet::Bullet(QObject *parent)
     : QObject{parent},
-      m_parent(nullptr)
+      m_topLayer(nullptr),
+      m_fontSize(20)
 {
     QWidget *tmp = static_cast<QWidget *>(parent);
     if(tmp){
-        m_parent = tmp;
+        m_topLayer = tmp;
     }else{
         return;
     }
 
-    m_font.setBold(true);
-    m_font.setFamily(QStringLiteral("幼圆"));
-    m_font.setPixelSize(50);
-
-    QWidget *parent_ = static_cast<QWidget *>(this->parent());
-    m_label = new QLabel(parent_);
+    m_label = new QLabel(m_topLayer);
     m_label->setFocusPolicy(Qt::NoFocus);
     m_label->setMinimumWidth(500);
     m_label->setAttribute(Qt::WA_TranslucentBackground);
@@ -29,18 +25,17 @@ Bullet::Bullet(QObject *parent)
     m_label->setWindowFlags(Qt::FramelessWindowHint  | Qt::WindowStaysOnTopHint);
     m_label->setWindowFlags(Qt::WindowStaysOnTopHint);
 //    m_label->setWindowFlags(Qt::Tool);
-    m_label->setStyleSheet(QString("color:%1;background-color: rgba(255, 29, 29,0);").arg(QColor::colorNames().at(QRandomGenerator::global()->bounded(QColor::colorNames().count()))));
-    m_label->setFont(m_font);
+    m_label->setStyleSheet(QString("color:%1;font: 75 20px \"微软雅黑\"").arg(QColor::colorNames().at(QRandomGenerator::global()->bounded(QColor::colorNames().count()))));
     m_animation = new QPropertyAnimation(m_label, "pos", this);
     connect(m_animation, SIGNAL(finished()), this, SLOT(slot_amFinished()));
 }
 
 void Bullet::shoot(QString msg, int lineNum)
 {
-    if(m_parent == nullptr){
+    if(m_topLayer == nullptr){
         return;
     }
-    m_label->move(QDesktopWidget().width() + QRandomGenerator::global()->bounded(1000) , lineNum * m_font.pixelSize());
+    m_label->move(m_topLayer->width() + QRandomGenerator::global()->bounded(1000) , lineNum * m_fontSize);
     m_label->setText(msg);
     m_label->show();
     int wordCnt = msg.size();
@@ -61,20 +56,22 @@ void Bullet::shoot(QString msg, int lineNum)
 Bullet::~Bullet()
 {
     qDebug() << "delete";
-    delete m_label;
+    m_label->deleteLater();
     m_label = nullptr;
 }
 
 int Bullet::setFontSize(int size)
 {
-    m_font.setPixelSize(size);
-    m_label->setFont(m_font);
-    return QDesktopWidget().height() / m_font.pixelSize();
+    m_fontSize = size;
+    m_label->setStyleSheet(QString("color:%1;font: 75 %2px \"微软雅黑\"")
+                           .arg(QColor::colorNames().at(QRandomGenerator::global()->bounded(QColor::colorNames().count())))
+                           .arg(size));
+    return m_topLayer->height() / size;
 }
 
 int Bullet::getLineCnt()
 {
-    return QDesktopWidget().height() / m_font.pixelSize();
+    return m_topLayer->height() / m_fontSize;
 }
 
 void Bullet::slot_amFinished()
@@ -85,6 +82,6 @@ void Bullet::slot_amFinished()
 void Bullet::slot_destroyBullet()
 {
     m_animation->stop();
-    m_label->hide();;
+    m_label->hide();
     emit m_animation->finished();  // 直接去外部析构
 }

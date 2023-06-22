@@ -14,6 +14,11 @@ Controller::~Controller()
     delete ui;
 }
 
+void Controller::setCheckBoxState(bool checked)
+{
+    ui->checkBox->setChecked(checked);
+}
+
 void Controller::on_pushButton_send_clicked()
 {
     qDebug() << __FUNCTION__ << ui->lineEdit_cmd->text();
@@ -25,6 +30,18 @@ void Controller::on_pushButton_send_clicked()
 
 void Controller::on_pushButton_playlist_clicked()
 {
-    emit sig_taggleList();
+    emit sig_toggleList();
+}
+
+
+void Controller::on_checkBox_toggled(bool checked)
+{
+    emit sig_toggleButtle(checked);
+}
+
+
+void Controller::on_pushButton_padSetting_clicked()
+{
+    emit sig_bulletSetting();
 }
 

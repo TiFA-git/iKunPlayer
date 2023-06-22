@@ -8,8 +8,9 @@
 ../build/release/obj/getrealurl.o
 ../build/release/obj/main.o
 ../build/release/obj/mainwindow.o
-../build/release/obj/mpvplayerwidget.o
+../build/release/obj/mpvplayerhandler.o
 ../build/release/obj/playerlistwidget.o
+../build/release/obj/playerwidget.o
 ../build/release/obj/moc_bullet.o
 ../build/release/obj/moc_bulletpad.o
 ../build/release/obj/moc_comnetwork.o
@@ -19,5 +20,6 @@
 ../build/release/obj/moc_gethuya.o
 ../build/release/obj/moc_getrealurl.o
 ../build/release/obj/moc_mainwindow.o
-../build/release/obj/moc_mpvplayerwidget.o
+../build/release/obj/moc_mpvplayerhandler.o
 ../build/release/obj/moc_playerlistwidget.o
+../build/release/obj/moc_playerwidget.o

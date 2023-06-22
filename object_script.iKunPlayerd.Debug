@@ -8,8 +8,9 @@
 ../build/debug/obj/getrealurl.o
 ../build/debug/obj/main.o
 ../build/debug/obj/mainwindow.o
-../build/debug/obj/mpvplayerwidget.o
+../build/debug/obj/mpvplayerhandler.o
 ../build/debug/obj/playerlistwidget.o
+../build/debug/obj/playerwidget.o
 ../build/debug/obj/moc_bullet.o
 ../build/debug/obj/moc_bulletpad.o
 ../build/debug/obj/moc_comnetwork.o
@@ -19,5 +20,6 @@
 ../build/debug/obj/moc_gethuya.o
 ../build/debug/obj/moc_getrealurl.o
 ../build/debug/obj/moc_mainwindow.o
-../build/debug/obj/moc_mpvplayerwidget.o
+../build/debug/obj/moc_mpvplayerhandler.o
 ../build/debug/obj/moc_playerlistwidget.o
+../build/debug/obj/moc_playerwidget.o

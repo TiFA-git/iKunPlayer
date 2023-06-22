@@ -26,8 +26,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-#MainWindow{
+   <string notr="true">#MainWindow{
 border:none;
 }
 QWidget{
@@ -42,6 +41,7 @@ QPushButton:hover{
 QComboBox{
 color:rgb(85, 255, 127)
 }
+
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -166,12 +166,12 @@ p, li { white-space: pre-wrap; }
         <number>0</number>
        </property>
        <item>
-        <widget class="MpvPlayerWidget" name="playerWidget" native="true">
+        <widget class="QFrame" name="playerFrame">
          <property name="mouseTracking">
           <bool>true</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(0, 0, 0);</string>
+          <string notr="true"/>
          </property>
         </widget>
        </item>
@@ -276,14 +276,6 @@ p, li { white-space: pre-wrap; }
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>MpvPlayerWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">mpvplayerwidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
