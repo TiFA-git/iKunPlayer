@@ -59,16 +59,16 @@ QJsonObject GetDouYu::getRealUrl()
             continue;
         if(curRate.contains("rate") && curRate.value("rate").toInt() > 0){
             resObj.insert(curRate.value("name").toString() + QString(" openhls-tct"),
-                       QString("http://openhls-tct.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
-                        QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
+                       QString("http://openflv-huos.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
+//            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
+//                        QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
         }else{
             resObj.insert(curRate.value("name").toString() + QString(" openhls-tct"),
-                       QString("http://openhls-tct.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
-                        QString("http://hdltctwk.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
+                       QString("http://openflv-huos.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
+//            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
+//                        QString("http://hdltctwk.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1.flv?uuid=").arg(key));
         }

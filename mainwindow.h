@@ -7,9 +7,12 @@
 #include <QObject>
 #include <QJsonObject>
 #include <QMouseEvent>
+#include <QStackedLayout>
+#include <QMoveEvent>
+
 #include "getdouyu.h"
 #include "gethuya.h"
-#include "mpvplayerwidget.h"
+#include "mpvplayerhandler.h"
 #include "getrealurl.h"
 
 
@@ -18,6 +21,7 @@ class PlayerListWidget;
 class DanMuClient;
 class Bullet;
 class BulletPad;
+class PlayerWidget;
 
 
 namespace Ui {
@@ -37,6 +41,9 @@ signals:
     void sig_loginBulletClient(QString rid);
     void sig_stopDanMuClient();
     void sig_clearBullet();
+
+protected:
+    void moveEvent(QMoveEvent *);
 
 private slots:
     void on_playPushButton_clicked(); // 播放/停止
@@ -63,10 +70,14 @@ private slots:
     void slot_maxBulletNum(int value);
     void slot_BulletRowCnt(int value);
     void slot_BulletSize(int value);
+    void slot_toggleBullet(bool checked);
+    void slot_showBulletPad();
 
 private:
-    Ui::MainWindow *ui;
-    void initControllerWidget();
+    void initPlayer();      //  初始化播放器
+    void initControllerWidget();    //  初始化全屏时播放控制器
+    void initRealUrl();     //  初始化推流地址
+
     bool isPlay(); // 判断是否在播放
     bool isRecord(); // 判断是否在录制
     void loadPlayLst();
@@ -79,19 +90,20 @@ private:
 
 
 private:
+    Ui::MainWindow *ui;
     bool m_isPlay;
     bool m_isRecord;
     QList<QStringList> playLst;
     QMap<QString, QJsonObject> realUrlsMap;  // 收到的直播源
     QMap<QString, QString> m_nick2Rid;    //  昵称2房间号， 用于弹幕接受
     QMap<QString, QJsonObject> realUrlsMapUI;  // 界面显示直播源，较旧
-    QJsonObject curUrlObj;
+    QJsonObject m_curUrlObj;
     bool m_isFullScreen;
     QTimer *hideCursor;
     QTimer *onTimeUpdateUrls;
     GetRealUrl *urlGetter;
     QThread *loadThread;
-    Controller *controllerWidget;
+    Controller *m_controllerWidget;
     PlayerListWidget *playerListWidget;
     DanMuClient *m_bulletClient;
     QThread *m_bulletThread;
@@ -102,7 +114,10 @@ private:
     int m_maxBulletNum;  // 屏幕上最大弹幕数
     int m_rowNum;
     int m_fontSize;
-
+    MpvPlayerHandler *m_player;
+    PlayerWidget *m_playerWidget;
+    QWidget *m_topLayerWidget;
+    QString m_curUrl;  // 当前播放的url
 };
 
 #endif // MAINWINDOW_H

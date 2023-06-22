@@ -49,8 +49,9 @@ SOURCES += \
     getrealurl.cpp \
         main.cpp \
         mainwindow.cpp \
-    mpvplayerwidget.cpp \
-    playerlistwidget.cpp
+    mpvplayerhandler.cpp \
+    playerlistwidget.cpp \
+    playerwidget.cpp
 
 HEADERS += \
     bullet.h \
@@ -62,14 +63,14 @@ HEADERS += \
     gethuya.h \
     getrealurl.h \
         mainwindow.h \
-    mpvplayerwidget.h \
-    playerlistwidget.h
+    mpvplayerhandler.h \
+    playerlistwidget.h \
+    playerwidget.h
 
 FORMS += \
         bulletpad.ui \
         controller.ui \
         mainwindow.ui \
-        mpvplayerwidget.ui \
         playerlistwidget.ui
 
 # Default rules for deployment.
