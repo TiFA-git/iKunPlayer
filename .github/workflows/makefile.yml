@@ -45,7 +45,7 @@ jobs:
          name: iKunPlayer_win_x64
          
     - name: Create a Release
-    - uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@v1
       with:
         artifacts: "iKunPlayer_win_x64*"
         token: ${{secrets.GITHUB_TOKEN}}
