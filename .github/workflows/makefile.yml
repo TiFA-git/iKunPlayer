@@ -48,5 +48,5 @@ jobs:
     - name: Create a Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "iKunPlayer_win_x64*"
+        artifacts: "iKunPlayer_win_x64, *"
   
