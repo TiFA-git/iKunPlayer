@@ -40,13 +40,11 @@ jobs:
         name: iKunPlayer_win_x64
         path: bin/release/
         
-    - name: download
-      uses: actions/download-artifact@v3
-      with:
-         name: iKunPlayer_win_x64
+    - name: compress
+      run: Compress-Archive -Path bin/release/ -DestinationPath iKunPlayer_win_x64.zip
          
     - name: Create a Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "iKunPlayer_win_x64, *"
+        artifacts: "iKunPlayer_win_x64.zip"
   
