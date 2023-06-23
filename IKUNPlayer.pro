@@ -25,13 +25,13 @@ ICON=$$PWD/logo.icns
 
 CONFIG(debug, debug|release){
     TARGET=$$join(TARGET,,,d)
-    DESTDIR=$$PWD/../bin/debug
+    DESTDIR=$$PWD/bin/debug
     OBJECTS_DIR=$$PWD/../build/debug/obj
     MOC_DIR=$$PWD/../build/debug/moc
     UI_DIR=$$PWD/../build/debug/ui
     RCC_DIR=$$PWD/../build/debug/rcc
 }else{
-    DESTDIR=$$PWD/../bin/release
+    DESTDIR=$$PWD/bin/release
     OBJECTS_DIR=$$PWD/../build/release/obj
     MOC_DIR=$$PWD/../build/release/moc
     UI_DIR=$$PWD/../build/release/ui

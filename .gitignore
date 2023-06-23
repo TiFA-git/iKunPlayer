@@ -2,3 +2,5 @@ IKUNPlayer.pro.*
 Makefile*
 object_script.*
 wq
+*.app
+*.exe
