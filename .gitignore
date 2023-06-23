@@ -1,1 +1,4 @@
-IKUNPlayer.pro.user
+IKUNPlayer.pro.*
+Makefile*
+object_script.*
+wq

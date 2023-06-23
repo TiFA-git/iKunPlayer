@@ -40,6 +40,7 @@ CONFIG(debug, debug|release){
 
 SOURCES += \
     bullet.cpp \
+    bulletpad.cpp \
     comnetwork.cpp \
     controller.cpp \
     danmuclient.cpp \
@@ -48,11 +49,13 @@ SOURCES += \
     getrealurl.cpp \
         main.cpp \
         mainwindow.cpp \
-    mpvplayerwidget.cpp \
-    playerlistwidget.cpp
+    mpvplayerhandler.cpp \
+    playerlistwidget.cpp \
+    playerwidget.cpp
 
 HEADERS += \
     bullet.h \
+    bulletpad.h \
     comnetwork.h \
     controller.h \
     danmuclient.h \
@@ -60,13 +63,14 @@ HEADERS += \
     gethuya.h \
     getrealurl.h \
         mainwindow.h \
-    mpvplayerwidget.h \
-    playerlistwidget.h
+    mpvplayerhandler.h \
+    playerlistwidget.h \
+    playerwidget.h
 
 FORMS += \
+        bulletpad.ui \
         controller.ui \
         mainwindow.ui \
-        mpvplayerwidget.ui \
         playerlistwidget.ui
 
 # Default rules for deployment.

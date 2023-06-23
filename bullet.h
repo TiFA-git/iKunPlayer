@@ -27,10 +27,10 @@ public slots:
 
 
 private:
-    QFont m_font;
+    int m_fontSize;
     QLabel *m_label;
     QPropertyAnimation *m_animation;
-    QWidget *m_parent;
+    QWidget *m_topLayer;
 };
 
 #endif // BULLET_H
