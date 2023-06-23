@@ -36,6 +36,18 @@ jobs:
     - name: upload-build
       uses: actions/upload-artifact@v3
       with:
-        name: build-result
+        name: iKunPlayer_win_x64
         path: bin/release/
+        
+    - name: download
+      uses: actions/download-artifact@v3
+      with:
+         name: iKunPlayer_win_x64
+         
+    - name: Create a Release
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "iKunPlayer_win_x64*"
+        token: ${{secrets.GITHUB_TOKEN}}
+    
 
