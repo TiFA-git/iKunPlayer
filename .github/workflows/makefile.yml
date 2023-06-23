@@ -21,6 +21,10 @@ jobs:
       run: |
         C:\Qt\5.15.2\mingw81_64\bin\qmake.exe IKUNPlayer.pro
         make
+        
+    - name: package
+      run: windeployqt bin/release/iKunPlayer.exe
+        
 
     - name: upload-build
       uses: actions/upload-artifact@v3
