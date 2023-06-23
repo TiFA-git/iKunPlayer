@@ -19,7 +19,7 @@ jobs:
        
     - name: qmake
       run: |
-        qmake IKUNPlayer.pro
+        C:\Qt\5.15.2\mingw81_64\bin\qmake.exe IKUNPlayer.pro
         make
 
     - name: Run check
