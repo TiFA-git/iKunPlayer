@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
 
@@ -47,5 +49,4 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "iKunPlayer_win_x64*"
-        token: ${{secrets.GITHUB_TOKEN}}
   
