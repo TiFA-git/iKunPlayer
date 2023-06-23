@@ -36,7 +36,7 @@ jobs:
     - name: upload-build
       uses: actions/upload-artifact@v3
       with:
-        name: iKunPlayer-win-x64
+        name: iKunPlayer_win_x64
         path: bin/release/
         
     - name: download
