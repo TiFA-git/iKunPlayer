@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install dependencies
-      run: choco install qt5 -y
+      run: choco install qt5-default -y
       
     - name: qmake
       run: |
