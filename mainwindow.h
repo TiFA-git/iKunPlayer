@@ -86,6 +86,7 @@ private:
     void initBulletClient();
     void toggleDanMu(bool b);
     void initBulletPad();
+    QRect getCurrentScreen();
 
 
 
