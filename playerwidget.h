@@ -27,12 +27,12 @@ signals:
 
 
 protected:
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
-    void mousePressEvent (QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mousePressEvent (QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private slots:
     void onTimeCursorHide();

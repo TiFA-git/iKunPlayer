@@ -7,6 +7,7 @@
 PlayerWidget::PlayerWidget(QWidget *parent)
     : QWidget{parent}
 {
+    setMouseTracking(true); // 确保mouseMove的时候即触发事件
     initTopLayer();
     initMouseTimer();
 }
@@ -25,7 +26,7 @@ void PlayerWidget::hideEvent(QHideEvent *event)
 
 void PlayerWidget::resizeEvent(QResizeEvent *event)
 {
-    m_topLayerWidget->setFixedSize(event->size());
+    m_topLayerWidget->setGeometry(this->geometry());
     event->ignore();
 }
 
@@ -57,7 +58,7 @@ void PlayerWidget::mouseMoveEvent(QMouseEvent *event)
 
 void PlayerWidget::onTimeCursorHide()
 {
-//    setCursor(Qt::BlankCursor);
+    setCursor(Qt::BlankCursor);
     hideCursor->stop();
     emit sig_showCtrl(false);
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
-    <height>434</height>
+    <width>371</width>
+    <height>755</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@ QComboBox{
     <number>9</number>
    </property>
    <property name="bottomMargin">
-    <number>50</number>
+    <number>9</number>
    </property>
    <item>
     <widget class="QFrame" name="frame_list_bg">

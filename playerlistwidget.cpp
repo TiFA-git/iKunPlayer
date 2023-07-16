@@ -6,7 +6,6 @@ PlayerListWidget::PlayerListWidget(QWidget *parent) :
     ui(new Ui::PlayerListWidget)
 {
     ui->setupUi(this);
-    setAttribute(Qt::WA_TranslucentBackground, true);
     setWindowFlags(Qt::FramelessWindowHint);
 }
 
