@@ -75,7 +75,6 @@ QString GetHuYa::live(QString e)
     }
     QStringList r = i_b.first().split("/");
     QString s = r.last().remove(QString(".flv")).remove(".m3u8");
-
     QStringList c_ = i_b.last().split("&");
     QStringList c;
     QString c_last = QString();
@@ -99,6 +98,13 @@ QString GetHuYa::live(QString e)
         }
         n.insert(c_item_lst.at(0), c_item_lst.at(1));
     }
+    QString uid = get_anonymous_uid();
+    QString seqid = QString::number( getTime17().toLongLong() + uid.toLongLong());
+    QString t = n.value("t");
+    QString ctype = n.value("ctype");
+    QString ss = QString("%1|%2|%3").arg(seqid).arg(ctype).arg(t);
+    ss = get_md5(ss);
+    QString wsTime= n.value("wsTime");
     QString fm = n.value("fm");
     fm.replace("%3F", "?");
     fm.replace("%2F", "/");
@@ -108,19 +114,17 @@ QString GetHuYa::live(QString e)
     fm.replace("%3D", "=");
     QByteArray u_ = QByteArray::fromBase64(fm.toUtf8());
     QString u = QString::fromUtf8(u_);
-    QString p = u.split('_').at(0);
-    QString f = getTime17();
-    QString l = n.value("wsTime");
-    QString t = "0";
-    QString h = p + QString("_") + t + QString("_")
-                                + s + QString("_") + f + QString("_") + l;
+    fm = u.split('_').at(0);
+    QString h = fm + QString("_") + uid + QString("_")
+                                + s + QString("_") + ss + QString("_") + wsTime;
     QString m = get_md5(h);
     QString y = c.last();
+    QString uuid = get_uuid();
     QString url = i_b.first() + QString("?wsSecret=") + m +
-            QString("&wsTime=") + l +QString("&u=") + t +
-            QString("&seqid=") + f+ QString("&") + y;
+            QString("&wsTime=") + wsTime +
+            QString("&seqid=") + seqid  + QString("&uid=") + uid +
+            QString("&uuid=") + uuid + QString("&ver=1&sv=2110211124") ;
     return url;
-
 }
 
 QString GetHuYa::get_md5(QString str)
@@ -136,6 +140,30 @@ QString GetHuYa::getTime17()
     qint64 tv_sec = tn.tv_sec;
     qint64 tv_nsec = tn.tv_nsec / 100;
     return QString::number(tv_sec) + QString::number(tv_nsec);
+}
+
+QString GetHuYa::get_anonymous_uid()
+{
+    QString url = "https://udblgn.huya.com/web/anonymousLogin";
+    QJsonObject headers;
+    headers.insert("appId", 5002);
+    headers.insert("byPass", 3);
+    headers.insert("context", "");
+    headers.insert("version", "2.4");
+    headers.insert("data", QJsonObject());
+    QByteArray byte = ComNetWork::postJson(url, QJsonObject(), headers);
+    QJsonDocument doc = QJsonDocument::fromJson(byte);
+    QJsonObject obj = doc.object();
+    QJsonObject data = obj.value("data").toObject();
+    QString uid = data.value("uid").toString();
+    return uid;
+}
+
+QString GetHuYa::get_uuid()
+{
+    qint64 now = getTime17().toLongLong();
+    qint64 res = now % 10000000000 * 1000 + (qrand() % 1000);
+    return QString::number(res % 4294967295);
 }
 
 void GetHuYa::setRid(QString rid_)

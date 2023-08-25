@@ -24,6 +24,7 @@ signals:
 public:
     static QByteArray get(const QString &strUrl, bool useHeader = false);
     static QByteArray post(const QString &strUrl, QJsonObject headers = QJsonObject(), QJsonObject data = QJsonObject());
+    static QByteArray postJson(const QString &strUrl, QJsonObject headers = QJsonObject(), QJsonObject data = QJsonObject());
     static QString search(QString re, QString str, int group, bool b = false);
 
 };
