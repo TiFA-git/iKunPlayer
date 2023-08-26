@@ -30,17 +30,10 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="pushButton_playlist">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label">
           <property name="text">
-           <string>列表</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="pushButton_play">
-          <property name="text">
-           <string>播放</string>
+           <string>cmd:</string>
           </property>
          </widget>
         </item>
@@ -51,13 +44,25 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="4">
+         <widget class="QPushButton" name="pushButton_send">
+          <property name="font">
+           <font>
+            <family>.AppleSystemUIFont</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>send</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <widget class="QLineEdit" name="lineEdit_cmd"/>
         </item>
-        <item row="0" column="4">
-         <widget class="QPushButton" name="pushButton_dm">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_play">
           <property name="text">
-           <string>弹幕开关</string>
+           <string>播放</string>
           </property>
          </widget>
         </item>
@@ -68,10 +73,17 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton_playlist">
           <property name="text">
-           <string>cmd:</string>
+           <string>列表</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="text">
+           <string>弹幕开关</string>
           </property>
          </widget>
         </item>
@@ -85,15 +97,10 @@
         <item row="2" column="3">
          <widget class="QLineEdit" name="lineEdit_args"/>
         </item>
-        <item row="2" column="4">
-         <widget class="QPushButton" name="pushButton_send">
-          <property name="font">
-           <font>
-            <family>.AppleSystemUIFont</family>
-           </font>
-          </property>
+        <item row="0" column="5">
+         <widget class="QPushButton" name="pushButton_padSetting">
           <property name="text">
-           <string>send</string>
+           <string>setting</string>
           </property>
          </widget>
         </item>

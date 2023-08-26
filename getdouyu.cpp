@@ -58,21 +58,17 @@ QJsonObject GetDouYu::getRealUrl()
         if(!(curRate.contains("name")))
             continue;
         if(curRate.contains("rate") && curRate.value("rate").toInt() > 0){
-            resObj.insert(curRate.value("name").toString() + QString(" hw-tct"),
-                       QString("http://hw-tct.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltc1"),
-                        QString("http://hdltc1.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
-                        QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
+            resObj.insert(curRate.value("name").toString() + QString("openflv-huos"),
+                       QString("http://openflv-huos.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
+//            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
+//                        QString("http://hdltctwk.douyucdn2.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1_%2.flv?uuid=").arg(key, QString::number(curRate.value("rate").toInt() * 1000)));
         }else{
-            resObj.insert(curRate.value("name").toString() + QString(" hw-tct"),
-                       QString("http://hw-tct.douyucdn.cn/live/%1.flv?uuid=").arg(key));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltc1"),
-                        QString("http://hdltc1.douyucdn.cn/live/%1.flv?uuid=").arg(key));
-            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
-                        QString("http://hdltctwk.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
+            resObj.insert(curRate.value("name").toString() + QString("openflv-huos"),
+                       QString("http://openflv-huos.douyucdn2.cn/live/%1.flv?uuid=").arg(key));
+//            resObj.insert(curRate.value("name").toString() + QString(" hdltctwk"),
+//                        QString("http://hdltctwk.douyucdn2.cn/live/%1.m3u8?txSecret=b371cdb3727a41fbeb4e52cd975b4f64&txTime=64870df7").arg(key));
 //            resObj.insert(curRate.value("name").toString() + QString("aliyun"),
 //                        QString("http://dyscdnali1.douyucdn.cn/live/%1.flv?uuid=").arg(key));
         }
@@ -117,7 +113,6 @@ QString GetDouYu::get_pre()
     data.insert("rid", rid);
     data.insert("did", did);
     QString url = QString("http://playweb.douyucdn.cn/lapi/live/hlsH5Preview/") + rid;
-//    QString url = QString("http://00f06771-a453-4d77-b65d-f9ffa115c86d.mock.pstmn.io");
     QByteArray res = ComNetWork::post(url, headers, data);
     if(res.isEmpty())
         return QString();
@@ -204,5 +199,3 @@ void GetDouYu::run()
 {
     getRealUrl();
 }
-
-
