@@ -65,6 +65,7 @@ void MpvPlayerHandler::play(QString filename)
         const char *args[] = {"loadfile", c_filename.data(), NULL};
         // 与mpv_command相同，但异步运行命令来避免阻塞，直到进程终止
         mpv_command_async(mpv, 0, args);
+        qDebug() << __FUNCTION__ << c_filename;
     }
 }
 

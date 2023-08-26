@@ -24,6 +24,8 @@ private:
     QString live(QString e);
     QString get_md5(QString str);
     QString getTime17();
+    QString get_anonymous_uid();
+    QString get_uuid();
 
 
 private:

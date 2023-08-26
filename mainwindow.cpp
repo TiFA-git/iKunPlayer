@@ -21,6 +21,7 @@
 #include <QVBoxLayout>
 #include <QStackedLayout>
 #include <QDebug>
+#include <QScreen>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -76,6 +77,9 @@ void MainWindow::onProcessFullScreen()
         showFullScreen();
     }
     m_player->play(m_curUrl);
+
+    // 修复window下某些情况位置不同步
+    m_playerWidget->setTopLayerPos(m_playerWidget->mapToGlobal(QPoint(0, 0)));
 }
 
 void MainWindow::slot_recRes(QString nick, QJsonObject res, QString rid)
@@ -107,8 +111,8 @@ bool MainWindow::isRecord()
 void MainWindow::initListWidget()
 {
     playerListWidget = new PlayerListWidget(this);
-    playerListWidget->setFixedHeight(QApplication::desktop()->height());
-    playerListWidget->move(0, 0);
+    playerListWidget->setFixedHeight(getCurrentScreen().height());
+    playerListWidget->move(getCurrentScreen().left(), getCurrentScreen().top());
     playerListWidget->hide();
     connect(playerListWidget, &PlayerListWidget::sig_ItemClick, this, &MainWindow::on_listWidget_itemClicked);
 }
@@ -152,6 +156,12 @@ void MainWindow::initBulletPad()
     connect(m_bulletPad, &BulletPad::sig_bulletRowCnt, this, &MainWindow::slot_BulletRowCnt);
     connect(m_bulletPad, &BulletPad::sig_fontSizePixel, this, &MainWindow::slot_BulletSize);
     connect(m_bulletPad, &BulletPad::sig_maxBulletNum, this, &MainWindow::slot_maxBulletNum);
+}
+
+QRect MainWindow::getCurrentScreen()
+{
+    QScreen *screen = QApplication::screenAt(QCursor::pos());
+    return screen->geometry();
 }
 
 void MainWindow::slot_updateUrls()
@@ -348,12 +358,15 @@ void MainWindow::slot_processCtrlShow(bool b)
         return;
     }
     if(m_controllerWidget->isVisible() != b){
+        m_controllerWidget->move((this->width() - m_controllerWidget->width()) / 2, this->height()- 200);
         m_controllerWidget->setVisible(b);
     }
 }
 
 void MainWindow::slot_taggleLst()
 {
+    playerListWidget->setFixedHeight(getCurrentScreen().height());
+    playerListWidget->move(getCurrentScreen().left(), getCurrentScreen().top());
     playerListWidget->setVisible(playerListWidget->isHidden());
 }
 
@@ -389,8 +402,7 @@ void MainWindow::slot_accurated(QObject * bullet)
 void MainWindow::initControllerWidget()
 {
     m_controllerWidget = new Controller(this);
-    m_controllerWidget->move((QApplication::desktop()->width() - m_controllerWidget->width()) / 2,
-                           QApplication::desktop()->height()- 200);
+    m_controllerWidget->move((this->width() - m_controllerWidget->width()) / 2, this->height()- 200);
     connect(m_controllerWidget, &Controller::sig_sendCMD, m_player, &MpvPlayerHandler::slot_setProperty);
     connect(m_playerWidget, &PlayerWidget::sig_showCtrl, this, &MainWindow::slot_processCtrlShow);
     connect(m_controllerWidget, &Controller::sig_toggleList, this, &MainWindow::slot_taggleLst);

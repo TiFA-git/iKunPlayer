@@ -61,7 +61,34 @@ QByteArray ComNetWork::post(const QString &strUrl, QJsonObject headers, QJsonObj
         dataStr += tmp;
     }
     QNetworkAccessManager m_qnam;
-    QNetworkReply* reply = m_qnam.post(qnr, QByteArray());
+    QNetworkReply* reply = m_qnam.post(qnr, dataStr.toUtf8());
+
+    QEventLoop eventLoop;
+    connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+
+    QByteArray replyData = reply->readAll();
+    reply->deleteLater();
+    reply = nullptr;
+    return replyData;
+}
+
+QByteArray ComNetWork::postJson(const QString &strUrl, QJsonObject headers, QJsonObject data)
+{
+    assert(!strUrl.isEmpty());
+    const QUrl url = QUrl::fromUserInput(strUrl);
+    assert(url.isValid());
+
+    QNetworkRequest qnr(url);
+    qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if(!headers.isEmpty()){
+        foreach (QString key, headers.keys()) {
+            qnr.setRawHeader(key.toUtf8(), headers.value(key).toString().toUtf8());
+        }
+    }
+
+    QNetworkAccessManager m_qnam;
+    QNetworkReply* reply = m_qnam.post(qnr, QJsonDocument(data).toJson());
 
     QEventLoop eventLoop;
     connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
