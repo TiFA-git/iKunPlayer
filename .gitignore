@@ -2,9 +2,6 @@ IKUNPlayer.pro.user
 IKUNPlayer.pro.user.f423b62
 object_script.iKunPlayer.Release
 object_script.iKunPlayerd.Debug
-mpv/libmpv-2.dll
-mpv/libmpv.dll.a
-mpv/mpv.def
 Makefile.Release
 Makefile.Debug
 Makefile
